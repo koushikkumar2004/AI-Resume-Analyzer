@@ -27,7 +27,30 @@ class ResumeParser:
         return None
 
     def extract_name(self):
-        pass
+        ignored_words = {
+            "resume",
+            "curriculum vitae",
+            "cv",
+            "profile",
+            "professional summary",
+            "summary",
+        }
+
+        lines = self.text.split("\n")
+
+        for line in lines:
+            line = line.strip()
+
+            if not line:
+                continue
+
+            if line.lower() in ignored_words:
+                continue
+
+            if len(line.split()) <= 4:
+                return line
+
+        return None
 
     def extract_skills(self):
         pass

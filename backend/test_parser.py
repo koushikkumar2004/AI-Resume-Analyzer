@@ -8,5 +8,6 @@ Phone: +91 9876543210
 
 parser = ResumeParser(sample_text)
 
+print("Name :", parser.extract_name())
 print("Email:", parser.extract_email())
 print("Phone:", parser.extract_phone())
