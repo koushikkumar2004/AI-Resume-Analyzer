@@ -17,7 +17,14 @@ class ResumeParser:
         return None
 
     def extract_phone(self):
-        pass
+        pattern = r"(?:\+?\d{1,3}[-.\s]?)?(?:\(?\d{2,4}\)?[-.\s]?)?\d{3,5}[-.\s]?\d{4}"
+
+        match = re.search(pattern, self.text)
+
+        if match:
+            return match.group().strip()
+
+        return None
 
     def extract_name(self):
         pass
