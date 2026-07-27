@@ -23,4 +23,26 @@ AI:
 
 ## Project Status
 
-🚧 Day 1 - Project Setup
+Day 1 - Project Setup
+
+## Features Completed
+
+- Resume Upload
+- PDF Text Extraction
+- Resume Parsing
+- Email Extraction
+- Phone Number Extraction
+- Name Extraction
+
+## Tech Stack
+
+### Frontend
+- React
+- TypeScript
+- Axios
+- Vite
+
+### Backend
+- FastAPI
+- PyMuPDF
+- Python

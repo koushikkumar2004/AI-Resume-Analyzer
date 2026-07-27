@@ -1,0 +1,17 @@
+========== SAMPLE 1 ==========
+
+John Doe
+Email: john.doe@email.com
+Phone: +91 9876543210
+
+========== SAMPLE 2 ==========
+
+Jane Smith
+Email: jane.smith@gmail.com
+Phone: 9876543210
+
+========== SAMPLE 3 ==========
+
+Michael Johnson
+Email: michael@gmail.com
+Phone: +1 555-123-4567
