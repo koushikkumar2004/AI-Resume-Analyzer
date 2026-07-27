@@ -7,7 +7,14 @@ class ResumeParser:
         self.text = text
 
     def extract_email(self):
-        pass
+        pattern = r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+
+        match = re.search(pattern, self.text)
+
+        if match:
+            return match.group()
+
+        return None
 
     def extract_phone(self):
         pass
