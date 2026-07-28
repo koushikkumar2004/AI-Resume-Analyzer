@@ -22,8 +22,4 @@ Docker
 
 parser = ResumeParser(sample_text)
 
-print("Name :", parser.extract_name())
-print("Email:", parser.extract_email())
-print("Phone:", parser.extract_phone())
-print("Skills:", parser.extract_skills())
-print("Education:", parser.extract_education())
+print(parser.parse_resume())

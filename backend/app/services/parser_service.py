@@ -75,3 +75,12 @@ class ResumeParser:
                detected_education.append(degree)
 
        return sorted(set(detected_education))
+
+    def parse_resume(self):
+        return {
+        "name": self.extract_name(),
+        "email": self.extract_email(),
+        "phone": self.extract_phone(),
+        "skills": self.extract_skills(),
+        "education": self.extract_education(),
+    }
