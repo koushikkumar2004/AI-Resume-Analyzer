@@ -2,8 +2,20 @@ from app.services.parser_service import ResumeParser
 
 sample_text = """
 John Doe
-Email: john.doe@email.com
+
+Email: john@email.com
+
 Phone: +91 9876543210
+
+Skills
+
+Python
+Java
+React
+FastAPI
+MongoDB
+Git
+Docker
 """
 
 parser = ResumeParser(sample_text)
@@ -11,3 +23,4 @@ parser = ResumeParser(sample_text)
 print("Name :", parser.extract_name())
 print("Email:", parser.extract_email())
 print("Phone:", parser.extract_phone())
+print("Skills:", parser.extract_skills())

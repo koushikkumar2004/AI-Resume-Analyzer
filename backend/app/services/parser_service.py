@@ -1,4 +1,5 @@
 import re
+from app.database.skills import SKILLS
 
 
 class ResumeParser:
@@ -53,7 +54,15 @@ class ResumeParser:
         return None
 
     def extract_skills(self):
-        pass
+        detected_skills = []
+
+        resume_text = self.text.lower()
+
+        for skill in SKILLS:
+            if skill.lower() in resume_text:
+                detected_skills.append(skill)
+
+        return sorted(set(detected_skills))
 
     def extract_education(self):
         pass
