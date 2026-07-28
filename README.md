@@ -1,48 +1,39 @@
-# AI Resume Analyzer
+## ✅ Features Completed
 
-## Overview
-
-An AI-powered web application that analyzes resumes, calculates ATS compatibility, extracts skills, compares resumes against job descriptions, and provides actionable improvement suggestions.
-
-## Tech Stack
-
-Frontend:
-- React
-- TypeScript
-- Tailwind CSS
-
-Backend:
-- FastAPI
-
-Database:
-- PostgreSQL
-
-AI:
-- LangChain
-- Sentence Transformers
-
-## Project Status
-
-Day 1 - Project Setup
-
-## Features Completed
-
-- Resume Upload
+### Backend
+- PDF Upload
 - PDF Text Extraction
-- Resume Parsing
+- Resume Parser
 - Email Extraction
-- Phone Number Extraction
+- Phone Extraction
 - Name Extraction
+- Skills Extraction
+- Education Extraction
+- REST API using FastAPI
+
+### Frontend
+- Resume Upload
+- Resume Analysis Dashboard
+- Skills Display
+- Education Display
 
 ## Tech Stack
 
 ### Frontend
 - React
 - TypeScript
-- Axios
 - Vite
+- Axios
 
 ### Backend
 - FastAPI
-- PyMuPDF
 - Python
+- PyMuPDF
+
+## Current Progress
+
+- ✅ Day 1 - Project Setup
+- ✅ Day 2 - Upload Resume
+- ✅ Day 3 - PDF Text Extraction
+- ✅ Day 4 - Resume Parsing
+- ✅ Day 5 - Skills & Education Extraction
