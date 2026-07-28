@@ -18,8 +18,10 @@ async def parse_resume(file: UploadFile = File(...)):
         f.write(await file.read())
 
     text = extract_text_from_pdf(file_path)
-
     parser = ResumeParser(text)
+
+    parsed_resume = parser.parse_resume()
+    return parsed_resume
 
     return {
         "name": parser.extract_name(),
