@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { extractResumeText } from "../services/resumeService";
+import { parseResume } from "../services/resumeService";
 
 function ResumeUploader() {
   const [file, setFile] = useState<File | null>(null);
-  const [extractedText, setExtractedText] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [resumeData, setResumeData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    skills: [] as string[],
+    education: [] as string[],
+  });
 
   const handleUpload = async () => {
     if (!file) {
@@ -15,12 +22,12 @@ function ResumeUploader() {
     try {
       setLoading(true);
 
-      const response = await extractResumeText(file);
+      const response = await parseResume(file);
 
-      setExtractedText(response.text);
+      setResumeData(response);
     } catch (error) {
       console.error(error);
-      alert("Failed to extract text from the PDF.");
+      alert("Failed to analyze the resume.");
     } finally {
       setLoading(false);
     }
@@ -36,7 +43,6 @@ function ResumeUploader() {
         onChange={(e) => {
           if (e.target.files && e.target.files.length > 0) {
             setFile(e.target.files[0]);
-            setExtractedText("");
           }
         }}
       />
@@ -45,10 +51,10 @@ function ResumeUploader() {
       <br />
 
       <button onClick={handleUpload} disabled={loading}>
-        {loading ? "Extracting..." : "Extract Resume Text"}
+        {loading ? "Analyzing..." : "Analyze Resume"}
       </button>
 
-      {extractedText && (
+      {resumeData.name && (
         <div
           style={{
             marginTop: "30px",
@@ -58,17 +64,37 @@ function ResumeUploader() {
             backgroundColor: "#f8f8f8",
           }}
         >
-          <h2>Extracted Resume Text</h2>
+          <h2>Resume Analysis</h2>
 
-          <pre
-            style={{
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-              fontFamily: "inherit",
-            }}
-          >
-            {extractedText}
-          </pre>
+          <p>
+            <strong>Name:</strong> {resumeData.name}
+          </p>
+
+          <p>
+            <strong>Email:</strong> {resumeData.email}
+          </p>
+
+          <p>
+            <strong>Phone:</strong> {resumeData.phone}
+          </p>
+
+          <hr />
+
+          <h3>Skills</h3>
+
+          <ul>
+            {resumeData.skills.map((skill, index) => (
+              <li key={index}>{skill}</li>
+            ))}
+          </ul>
+
+          <h3>Education</h3>
+
+          <ul>
+            {resumeData.education.map((degree, index) => (
+              <li key={index}>{degree}</li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
