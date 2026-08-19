@@ -23,3 +23,22 @@ Docker
 parser = ResumeParser(sample_text)
 
 print(parser.parse_resume())
+
+
+from app.services.job_parser_service import JobDescriptionParser
+
+
+job_description = """
+We are looking for a Software Developer.
+
+Required skills:
+Python
+React
+SQL
+Docker
+AWS
+"""
+
+job_parser = JobDescriptionParser(job_description)
+
+print("Required Skills:", job_parser.extract_required_skills())
