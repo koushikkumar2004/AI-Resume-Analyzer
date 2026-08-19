@@ -63,3 +63,25 @@ result = matcher.compare_skills(
 print("Matched Skills:", result["matched_skills"])
 print("Missing Skills:", result["missing_skills"])
 print("Match Percentage:", result["match_percentage"], "%")
+
+
+from app.services.ats_service import ATSScorer
+
+
+resume_data = {
+    "name": "",
+    "email": "",
+    "phone": "",
+    "skills": ["Python", "React", "SQL"],
+    "education": ["Bachelor of Engineering"],
+    "summary": "Software developer interested in AI and full-stack development.",
+    "experience": [
+        "Software Engineering Intern"
+    ]
+}
+
+scorer = ATSScorer()
+
+ats_score = scorer.calculate_score(resume_data)
+
+print("ATS Score:", ats_score)
