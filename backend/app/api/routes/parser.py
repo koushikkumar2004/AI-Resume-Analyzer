@@ -6,6 +6,7 @@ from app.services.parser_service import ResumeParser
 from app.services.job_parser_service import JobDescriptionParser
 from app.services.matching_service import ResumeJobMatcher
 from app.services.ats_service import ATSScorer
+from app.services.suggestion_service import ResumeSuggestionService 
 
 router = APIRouter()
 
@@ -63,12 +64,20 @@ async def analyze_resume(
     ats_scorer = ATSScorer()
 
     ats_score = ats_scorer.calculate_score(resume_data)
+    suggestion_service = ResumeSuggestionService()
+
+    suggestions = suggestion_service.generate_suggestions(
+    resume_data,
+    match_result["missing_skills"],
+    ats_score
+)
 
     return {
-        "resume": resume_data,
-        "required_skills": required_skills,
-        "matched_skills": match_result["matched_skills"],
-        "missing_skills": match_result["missing_skills"],
-        "match_percentage": match_result["match_percentage"],
-        "ats_score": ats_score
-    }
+    "resume": resume_data,
+    "required_skills": required_skills,
+    "matched_skills": match_result["matched_skills"],
+    "missing_skills": match_result["missing_skills"],
+    "match_percentage": match_result["match_percentage"],
+    "ats_score": ats_score,
+    "suggestions": suggestions
+}
