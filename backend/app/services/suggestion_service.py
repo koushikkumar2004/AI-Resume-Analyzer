@@ -21,6 +21,18 @@ class ResumeSuggestionService:
         ats_score
     ):
         suggestions = []
+        if not resume_data.get("email"):
+            suggestions.append(
+        "Add a professional email address to your resume."
+    )
+        if not resume_data.get("phone"):
+            suggestions.append(
+        "Add a phone number so recruiters can contact you."
+    )
+        if not resume_data.get("name"):
+            suggestions.append(
+        "Add your full name clearly at the top of your resume."
+    )
 
         if not resume_data.get("summary"):
             suggestions.append(
