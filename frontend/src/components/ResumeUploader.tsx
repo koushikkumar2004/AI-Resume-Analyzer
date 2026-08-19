@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { jsPDF } from "jspdf";
 import { analyzeResume } from "../services/resumeService";
 
 function ResumeUploader() {
@@ -40,62 +41,170 @@ function ResumeUploader() {
       return;
     }
 
-    const report = `
-AI RESUME ANALYZER
-==================
+    const doc = new jsPDF();
 
-ATS Score: ${analysis.ats_score}%
-Job Match: ${analysis.match_percentage}%
+    let y = 20;
 
-MATCHED SKILLS
--------------
-${analysis.matched_skills
-  .map((skill: string) => `- ${skill}`)
-  .join("\n")}
+    const addText = (
+      text: string,
+      fontSize = 11,
+      bold = false
+    ) => {
+      doc.setFontSize(fontSize);
+      doc.setFont(
+        "helvetica",
+        bold ? "bold" : "normal"
+      );
 
-MISSING SKILLS
--------------
-${analysis.missing_skills
-  .map((skill: string) => `- ${skill}`)
-  .join("\n")}
+      const lines = doc.splitTextToSize(
+        text,
+        170
+      );
 
-RESUME INFORMATION
-------------------
-Name: ${analysis.resume.name || "Not detected"}
-Email: ${analysis.resume.email || "Not detected"}
-Phone: ${analysis.resume.phone || "Not detected"}
+      if (y + lines.length * 6 > 275) {
+        doc.addPage();
+        y = 20;
+      }
 
-EDUCATION
----------
-${analysis.resume.education
-  .map((education: string) => `- ${education}`)
-  .join("\n")}
+      doc.text(lines, 20, y);
 
-IMPROVEMENT SUGGESTIONS
------------------------
-${analysis.suggestions
-  .map((suggestion: string) => `- ${suggestion}`)
-  .join("\n")}
-`;
+      y += lines.length * 6 + 4;
+    };
 
-    const blob = new Blob([report], {
-      type: "text/plain",
-    });
+    addText(
+      "AI RESUME ANALYZER",
+      20,
+      true
+    );
 
-    const url = URL.createObjectURL(blob);
+    y += 5;
 
-    const link = document.createElement("a");
+    addText(
+      `ATS Score: ${analysis.ats_score}%`,
+      13,
+      true
+    );
 
-    link.href = url;
-    link.download = "resume-analysis-report.txt";
+    addText(
+      `Job Match: ${analysis.match_percentage}%`,
+      13,
+      true
+    );
 
-    document.body.appendChild(link);
+    y += 5;
 
-    link.click();
+    addText(
+      "MATCHED SKILLS",
+      14,
+      true
+    );
 
-    document.body.removeChild(link);
+    if (analysis.matched_skills.length > 0) {
+      analysis.matched_skills.forEach(
+        (skill: string) => {
+          addText(`• ${skill}`);
+        }
+      );
+    } else {
+      addText("No matched skills detected.");
+    }
 
-    URL.revokeObjectURL(url);
+    y += 3;
+
+    addText(
+      "MISSING SKILLS",
+      14,
+      true
+    );
+
+    if (analysis.missing_skills.length > 0) {
+      analysis.missing_skills.forEach(
+        (skill: string) => {
+          addText(`• ${skill}`);
+        }
+      );
+    } else {
+      addText("No missing skills detected.");
+    }
+
+    y += 3;
+
+    addText(
+      "RESUME INFORMATION",
+      14,
+      true
+    );
+
+    addText(
+      `Name: ${
+        analysis.resume.name ||
+        "Not detected"
+      }`
+    );
+
+    addText(
+      `Email: ${
+        analysis.resume.email ||
+        "Not detected"
+      }`
+    );
+
+    addText(
+      `Phone: ${
+        analysis.resume.phone ||
+        "Not detected"
+      }`
+    );
+
+    y += 3;
+
+    addText(
+      "EDUCATION",
+      14,
+      true
+    );
+
+    if (
+      analysis.resume.education &&
+      analysis.resume.education.length > 0
+    ) {
+      analysis.resume.education.forEach(
+        (education: string) => {
+          addText(`• ${education}`);
+        }
+      );
+    } else {
+      addText(
+        "No education information detected."
+      );
+    }
+
+    y += 3;
+
+    addText(
+      "RESUME IMPROVEMENT SUGGESTIONS",
+      14,
+      true
+    );
+
+    if (
+      analysis.suggestions &&
+      analysis.suggestions.length > 0
+    ) {
+      analysis.suggestions.forEach(
+        (suggestion: string) => {
+          addText(`• ${suggestion}`);
+        }
+      );
+    } else {
+      addText(
+        "No improvement suggestions."
+      );
+    }
+
+    doc.save(
+      "resume-analysis-report.pdf"
+    );
   };
 
   return (
@@ -106,9 +215,27 @@ ${analysis.suggestions
         margin: "0 auto",
       }}
     >
-      <h1>AI Resume Analyzer</h1>
+      {/* Main Page Heading */}
 
-      <h3>Select Resume</h3>
+      <h1
+        style={{
+          color: "#f3f4f6",
+          fontSize: "36px",
+          fontWeight: "700",
+        }}
+      >
+        AI Resume Analyzer
+      </h1>
+
+      {/* Resume Upload */}
+
+      <h3
+        style={{
+          color: "#f3f4f6",
+        }}
+      >
+        Select Resume
+      </h3>
 
       <input
         type="file"
@@ -127,7 +254,15 @@ ${analysis.suggestions
       <br />
       <br />
 
-      <h3>Job Description</h3>
+      {/* Job Description */}
+
+      <h3
+        style={{
+          color: "#f3f4f6",
+        }}
+      >
+        Job Description
+      </h3>
 
       <textarea
         value={jobDescription}
@@ -140,36 +275,71 @@ ${analysis.suggestions
           width: "100%",
           padding: "12px",
           borderRadius: "8px",
-          border: "1px solid #ccc",
+          border: "1px solid #d1d5db",
           resize: "vertical",
           boxSizing: "border-box",
+          color: "#111827",
+          backgroundColor: "#ffffff",
+          fontSize: "14px",
         }}
       />
 
       <br />
       <br />
 
+      {/* Analyze Button */}
+
       <button
         onClick={handleAnalyze}
         disabled={loading}
+        style={{
+          padding: "11px 20px",
+          borderRadius: "8px",
+          border: "none",
+          backgroundColor: "#ffffff",
+          color: "#111827",
+          cursor: loading
+            ? "not-allowed"
+            : "pointer",
+          fontSize: "15px",
+          fontWeight: "600",
+        }}
       >
         {loading
           ? "Analyzing..."
           : "Analyze Resume"}
       </button>
 
+      {/* Analysis */}
+
       {analysis && (
         <div
           style={{
             marginTop: "40px",
             padding: "30px",
-            border: "1px solid #ddd",
+            border: "1px solid #d1d5db",
             borderRadius: "12px",
             backgroundColor: "#ffffff",
+            color: "#111827",
             textAlign: "left",
+            opacity: 1,
+            boxShadow:
+              "0 4px 12px rgba(0, 0, 0, 0.08)",
           }}
         >
-          <h2>Resume Analysis</h2>
+          {/* Analysis Heading */}
+
+          <h2
+            style={{
+              color: "#111827",
+              fontSize: "28px",
+              fontWeight: "700",
+              marginTop: "0",
+              marginBottom: "15px",
+            }}
+          >
+            Resume Analysis
+          </h2>
 
           {/* Download Report */}
 
@@ -177,10 +347,14 @@ ${analysis.suggestions
             onClick={downloadReport}
             style={{
               marginTop: "10px",
-              padding: "10px 18px",
+              padding: "11px 18px",
               borderRadius: "8px",
               border: "none",
+              backgroundColor: "#111827",
+              color: "#ffffff",
               cursor: "pointer",
+              fontSize: "14px",
+              fontWeight: "600",
             }}
           >
             📥 Download Analysis Report
@@ -192,48 +366,76 @@ ${analysis.suggestions
             style={{
               display: "flex",
               gap: "20px",
-              marginTop: "20px",
+              marginTop: "25px",
               flexWrap: "wrap",
             }}
           >
+            {/* ATS Score */}
+
             <div
               style={{
                 flex: 1,
                 minWidth: "200px",
                 padding: "20px",
-                border: "1px solid #ddd",
+                border:
+                  "1px solid #d1d5db",
                 borderRadius: "10px",
+                backgroundColor: "#ffffff",
+                color: "#111827",
               }}
             >
-              <h3>ATS Score</h3>
+              <h3
+                style={{
+                  color: "#374151",
+                  fontWeight: "700",
+                  marginTop: "0",
+                }}
+              >
+                ATS Score
+              </h3>
 
               <p
                 style={{
                   fontSize: "36px",
-                  fontWeight: "bold",
+                  fontWeight: "700",
                   margin: "10px 0",
+                  color: "#111827",
                 }}
               >
                 {analysis.ats_score}%
               </p>
             </div>
 
+            {/* Job Match */}
+
             <div
               style={{
                 flex: 1,
                 minWidth: "200px",
                 padding: "20px",
-                border: "1px solid #ddd",
+                border:
+                  "1px solid #d1d5db",
                 borderRadius: "10px",
+                backgroundColor: "#ffffff",
+                color: "#111827",
               }}
             >
-              <h3>Job Match</h3>
+              <h3
+                style={{
+                  color: "#374151",
+                  fontWeight: "700",
+                  marginTop: "0",
+                }}
+              >
+                Job Match
+              </h3>
 
               <p
                 style={{
                   fontSize: "36px",
-                  fontWeight: "bold",
+                  fontWeight: "700",
                   margin: "10px 0",
+                  color: "#111827",
                 }}
               >
                 {analysis.match_percentage}%
@@ -247,12 +449,21 @@ ${analysis.suggestions
             style={{
               marginTop: "30px",
               textAlign: "left",
+              color: "#111827",
             }}
           >
-            <h3>Education</h3>
+            <h3
+              style={{
+                color: "#374151",
+                fontWeight: "700",
+              }}
+            >
+              Education
+            </h3>
 
             <ul
               style={{
+                margin: "15px 0 0 0",
                 paddingLeft: "25px",
                 textAlign: "left",
               }}
@@ -268,6 +479,7 @@ ${analysis.suggestions
                       marginBottom: "10px",
                       paddingLeft: "5px",
                       lineHeight: "1.5",
+                      color: "#374151",
                     }}
                   >
                     {education}
@@ -285,7 +497,14 @@ ${analysis.suggestions
               textAlign: "left",
             }}
           >
-            <h3>Matched Skills</h3>
+            <h3
+              style={{
+                color: "#374151",
+                fontWeight: "700",
+              }}
+            >
+              Matched Skills
+            </h3>
 
             <div
               style={{
@@ -304,7 +523,11 @@ ${analysis.suggestions
                     style={{
                       padding: "8px 14px",
                       borderRadius: "20px",
-                      backgroundColor: "#e8f5e9",
+                      backgroundColor:
+                        "#e8f5e9",
+                      color: "#166534",
+                      fontSize: "13px",
+                      fontWeight: "600",
                     }}
                   >
                     ✓ {skill}
@@ -322,7 +545,14 @@ ${analysis.suggestions
               textAlign: "left",
             }}
           >
-            <h3>Missing Skills</h3>
+            <h3
+              style={{
+                color: "#374151",
+                fontWeight: "700",
+              }}
+            >
+              Missing Skills
+            </h3>
 
             <div
               style={{
@@ -341,7 +571,11 @@ ${analysis.suggestions
                     style={{
                       padding: "8px 14px",
                       borderRadius: "20px",
-                      backgroundColor: "#ffebee",
+                      backgroundColor:
+                        "#ffebee",
+                      color: "#b91c1c",
+                      fontSize: "13px",
+                      fontWeight: "600",
                     }}
                   >
                     ✗ {skill}
@@ -359,7 +593,12 @@ ${analysis.suggestions
               textAlign: "left",
             }}
           >
-            <h3>
+            <h3
+              style={{
+                color: "#374151",
+                fontWeight: "700",
+              }}
+            >
               Resume Improvement Suggestions
             </h3>
 
@@ -381,6 +620,7 @@ ${analysis.suggestions
                       marginBottom: "12px",
                       paddingLeft: "5px",
                       lineHeight: "1.5",
+                      color: "#374151",
                     }}
                   >
                     {suggestion}
@@ -396,23 +636,31 @@ ${analysis.suggestions
             style={{
               marginTop: "30px",
               textAlign: "left",
+              color: "#111827",
             }}
           >
-            <h3>Resume Information</h3>
+            <h3
+              style={{
+                color: "#374151",
+                fontWeight: "700",
+              }}
+            >
+              Resume Information
+            </h3>
 
-            <p>
+            <p style={{ color: "#374151" }}>
               <strong>Name:</strong>{" "}
               {analysis.resume.name ||
                 "Not detected"}
             </p>
 
-            <p>
+            <p style={{ color: "#374151" }}>
               <strong>Email:</strong>{" "}
               {analysis.resume.email ||
                 "Not detected"}
             </p>
 
-            <p>
+            <p style={{ color: "#374151" }}>
               <strong>Phone:</strong>{" "}
               {analysis.resume.phone ||
                 "Not detected"}

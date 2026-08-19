@@ -1,0 +1,25 @@
+# Python
+backend/venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/.pytest_cache/
+
+# Environment variables
+.env
+backend/.env
+frontend/.env
+
+# Uploaded files
+backend/app/uploads/*
+!backend/app/uploads/.gitkeep
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

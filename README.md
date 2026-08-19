@@ -1,39 +1,80 @@
-## ✅ Features Completed
+# AI Resume Analyzer
 
-### Backend
-- PDF Upload
-- PDF Text Extraction
-- Resume Parser
-- Email Extraction
-- Phone Extraction
-- Name Extraction
-- Skills Extraction
-- Education Extraction
-- REST API using FastAPI
+An AI-powered full-stack application that analyzes resumes against job descriptions and provides ATS scores, skill matching, missing skills, and resume improvement suggestions.
+
+---
+
+## 🚀 Features
+
+- PDF resume upload
+- PDF text extraction
+- Resume information extraction
+- Email extraction
+- Phone number extraction
+- Name extraction
+- Skills extraction
+- Education extraction
+- Job description analysis
+- Resume vs job skill matching
+- ATS score calculation
+- Job match percentage
+- Missing skill detection
+- Skill-specific recommendations
+- Resume improvement suggestions
+- Downloadable PDF analysis report
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- Resume Upload
-- Resume Analysis Dashboard
-- Skills Display
-- Education Display
 
-## Tech Stack
-
-### Frontend
 - React
 - TypeScript
 - Vite
 - Axios
+- jsPDF
 
 ### Backend
-- FastAPI
+
 - Python
+- FastAPI
 - PyMuPDF
+- Uvicorn
 
-## Current Progress
+---
 
-- ✅ Day 1 - Project Setup
-- ✅ Day 2 - Upload Resume
-- ✅ Day 3 - PDF Text Extraction
-- ✅ Day 4 - Resume Parsing
-- ✅ Day 5 - Skills & Education Extraction
+## 📁 Project Structure
+
+```text
+AI-Resume-Analyzer/
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── database/
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── uploads/
+│   │   └── main.py
+│   │
+│   ├── tests/
+│   ├── venv/
+│   ├── requirements.txt
+│   └── .env
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── ...
+│   │
+│   ├── public/
+│   ├── package.json
+│   └── ...
+│
+├── .gitignore
+└── README.md
