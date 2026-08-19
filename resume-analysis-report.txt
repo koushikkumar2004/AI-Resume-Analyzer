@@ -1,0 +1,44 @@
+
+AI RESUME ANALYZER
+==================
+
+ATS Score: 70%
+Job Match: 84.62%
+
+MATCHED SKILLS
+-------------
+- fastapi
+- git
+- java
+- javascript
+- mongodb
+- node.js
+- postgresql
+- python
+- react
+- sql
+- typescript
+
+MISSING SKILLS
+-------------
+- aws
+- docker
+
+RESUME INFORMATION
+------------------
+Name: RAMITHA R
+Email: ramitha16804@gmail.com
+Phone: +91 8548957860
+
+EDUCATION
+---------
+- B.Tech
+- BE
+- ME
+
+IMPROVEMENT SUGGESTIONS
+-----------------------
+- Add a professional summary at the beginning of your resume.
+- Add relevant internship, work, or practical project experience.
+- aws: Learn AWS fundamentals and deploy a small application using services such as EC2, S3, or RDS.
+- docker: Containerize one of your projects and learn Docker images, containers, volumes, and networking.
