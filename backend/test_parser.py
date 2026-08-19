@@ -50,13 +50,8 @@ resume_skills = [
     "Git"
 ]
 
-required_skills = [
-    "Python",
-    "React",
-    "SQL",
-    "Docker",
-    "AWS"
-]
+required_skills = []
+
 
 matcher = ResumeJobMatcher()
 
@@ -67,3 +62,4 @@ result = matcher.compare_skills(
 
 print("Matched Skills:", result["matched_skills"])
 print("Missing Skills:", result["missing_skills"])
+print("Match Percentage:", result["match_percentage"], "%")

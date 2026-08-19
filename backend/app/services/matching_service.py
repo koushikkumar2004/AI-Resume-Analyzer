@@ -19,7 +19,16 @@ class ResumeJobMatcher:
             required_skill_set.difference(resume_skill_set)
         )
 
+        match_percentage = 0
+
+        if required_skill_set:
+            match_percentage = round(
+                (len(matched_skills) / len(required_skill_set)) * 100,
+                2
+            )
+
         return {
             "matched_skills": matched_skills,
             "missing_skills": missing_skills,
+            "match_percentage": match_percentage,
         }
