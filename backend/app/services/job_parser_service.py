@@ -1,3 +1,4 @@
+import re
 from app.database.skills import SKILLS
 
 
@@ -12,7 +13,9 @@ class JobDescriptionParser:
         job_text = self.text.lower()
 
         for skill in SKILLS:
-            if skill.lower() in job_text:
+            pattern = r"\b" + re.escape(skill.lower()) + r"\b"
+
+            if re.search(pattern, job_text):
                 detected_skills.append(skill)
 
         return sorted(set(detected_skills))
