@@ -117,3 +117,36 @@ print("Suggestions:")
 
 for suggestion in suggestions:
     print("-", suggestion)
+
+
+from app.services.suggestion_service import ResumeSuggestionService
+
+
+resume_data = {
+    "name": "John Doe",
+    "email": "john@email.com",
+    "phone": "+91 9876543210",
+    "skills": ["Python", "React"],
+    "education": ["Bachelor of Engineering"]
+}
+
+missing_skills = [
+    "AWS",
+    "SQL",
+    "Docker"
+]
+
+ats_score = 60
+
+suggestion_service = ResumeSuggestionService()
+
+suggestions = suggestion_service.generate_suggestions(
+    resume_data,
+    missing_skills,
+    ats_score
+)
+
+print("Suggestions:")
+
+for suggestion in suggestions:
+    print("-", suggestion)
