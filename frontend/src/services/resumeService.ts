@@ -38,3 +38,17 @@ export const parseResume = async (file: File) => {
 
   return response.data;
 };
+
+export const analyzeResume = async (
+  file: File,
+  jobDescription: string
+) => {
+  const formData = new FormData();
+
+  formData.append("file", file);
+  formData.append("job_description", jobDescription);
+
+  const response = await api.post("/analyze-resume", formData);
+
+  return response.data;
+};

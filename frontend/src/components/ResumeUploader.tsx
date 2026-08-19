@@ -1,41 +1,52 @@
 import { useState } from "react";
-import { parseResume } from "../services/resumeService";
+import { analyzeResume } from "../services/resumeService";
 
 function ResumeUploader() {
   const [file, setFile] = useState<File | null>(null);
+  const [jobDescription, setJobDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [resumeData, setResumeData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    skills: [] as string[],
-    education: [] as string[],
-  });
+  const [analysis, setAnalysis] = useState<any>(null);
 
-  const handleUpload = async () => {
+  const handleAnalyze = async () => {
     if (!file) {
       alert("Please select a PDF.");
+      return;
+    }
+
+    if (!jobDescription.trim()) {
+      alert("Please enter a job description.");
       return;
     }
 
     try {
       setLoading(true);
 
-      const response = await parseResume(file);
+      const response = await analyzeResume(
+        file,
+        jobDescription
+      );
 
-      setResumeData(response);
+      setAnalysis(response);
     } catch (error) {
       console.error(error);
-      alert("Failed to analyze the resume.");
+      alert("Failed to analyze resume.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: "40px", maxWidth: "900px", margin: "0 auto" }}>
+    <div
+      style={{
+        padding: "40px",
+        maxWidth: "900px",
+        margin: "0 auto",
+      }}
+    >
       <h1>AI Resume Analyzer</h1>
+
+      <h3>Select Resume</h3>
 
       <input
         type="file"
@@ -43,6 +54,7 @@ function ResumeUploader() {
         onChange={(e) => {
           if (e.target.files && e.target.files.length > 0) {
             setFile(e.target.files[0]);
+            setAnalysis(null);
           }
         }}
       />
@@ -50,50 +62,98 @@ function ResumeUploader() {
       <br />
       <br />
 
-      <button onClick={handleUpload} disabled={loading}>
+      <h3>Job Description</h3>
+
+      <textarea
+        value={jobDescription}
+        onChange={(e) => setJobDescription(e.target.value)}
+        placeholder="Paste the job description here..."
+        rows={10}
+        style={{
+          width: "100%",
+          padding: "12px",
+          borderRadius: "8px",
+          border: "1px solid #ccc",
+          resize: "vertical",
+          boxSizing: "border-box",
+        }}
+      />
+
+      <br />
+      <br />
+
+      <button
+        onClick={handleAnalyze}
+        disabled={loading}
+      >
         {loading ? "Analyzing..." : "Analyze Resume"}
       </button>
 
-      {resumeData.name && (
-        <div
-          style={{
-            marginTop: "30px",
-            padding: "20px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            backgroundColor: "#f8f8f8",
-          }}
-        >
-          <h2>Resume Analysis</h2>
+      {analysis && (
+        <div style={{ marginTop: "30px" }}>
+          <h2>Analysis Results</h2>
+
+          <h3>ATS Score</h3>
+          <p>{analysis.ats_score}%</p>
+
+          <h3>Job Match</h3>
+          <p>{analysis.match_percentage}%</p>
+
+          <h3>Matched Skills</h3>
+
+          <ul>
+            {analysis.matched_skills.map(
+              (skill: string, index: number) => (
+                <li key={index}>{skill}</li>
+              )
+            )}
+          </ul>
+
+          <h3>Missing Skills</h3>
+
+          <ul>
+            {analysis.missing_skills.map(
+              (skill: string, index: number) => (
+                <li key={index}>{skill}</li>
+              )
+            )}
+          </ul>
+
+          <h3>Resume Information</h3>
 
           <p>
-            <strong>Name:</strong> {resumeData.name}
+            <strong>Name:</strong>{" "}
+            {analysis.resume.name}
           </p>
 
           <p>
-            <strong>Email:</strong> {resumeData.email}
+            <strong>Email:</strong>{" "}
+            {analysis.resume.email}
           </p>
 
           <p>
-            <strong>Phone:</strong> {resumeData.phone}
+            <strong>Phone:</strong>{" "}
+            {analysis.resume.phone}
           </p>
-
-          <hr />
 
           <h3>Skills</h3>
 
           <ul>
-            {resumeData.skills.map((skill, index) => (
-              <li key={index}>{skill}</li>
-            ))}
+            {analysis.resume.skills.map(
+              (skill: string, index: number) => (
+                <li key={index}>{skill}</li>
+              )
+            )}
           </ul>
 
           <h3>Education</h3>
 
           <ul>
-            {resumeData.education.map((degree, index) => (
-              <li key={index}>{degree}</li>
-            ))}
+            {analysis.resume.education.map(
+              (education: string, index: number) => (
+                <li key={index}>{education}</li>
+              )
+            )}
           </ul>
         </div>
       )}

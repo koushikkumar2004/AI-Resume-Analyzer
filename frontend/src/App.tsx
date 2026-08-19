@@ -1,7 +1,9 @@
 import ResumeUploader from "./components/ResumeUploader";
 
 function App() {
-  return <ResumeUploader />;
+  return (
+    <ResumeUploader />
+  );
 }
 
 export default App;
